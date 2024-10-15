@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "telegram-bot"
+version = "0.1.0"
+description = ""
+authors = ["shukranjs <shukranjsp@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+python-telegram-bot = "^20.0"
+mysql-connector-python = "^9.1.0"
+black = "^23.0"
+flake8 = "^6.0.0"
+isort = "^5.10.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
