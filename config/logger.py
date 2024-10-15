@@ -1,12 +1,12 @@
 import logging
 
+
 def setup_logger():
     logging.basicConfig(
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         level=logging.INFO,
-        handlers=[
-            logging.StreamHandler()
-        ]
+        handlers=[logging.StreamHandler()],
     )
+
 
 logger = logging.getLogger(__name__)

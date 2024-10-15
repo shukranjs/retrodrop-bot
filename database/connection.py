@@ -1,6 +1,8 @@
 import mysql.connector
 from mysql.connector import MySQLConnection
+
 from config.db import DB_CONFIG
+
 
 def get_db_connection() -> MySQLConnection:
     """

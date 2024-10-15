@@ -1,8 +1,10 @@
-from typing import Optional, Dict, Any
 from datetime import datetime
+from typing import Any, Dict, Optional
 
 from config.logger import logger
+
 from .connection import get_db_connection
+
 
 def create_table_if_not_exists() -> None:
     """
@@ -11,14 +13,16 @@ def create_table_if_not_exists() -> None:
     db_conn = get_db_connection()
     cursor = db_conn.cursor()
     try:
-        cursor.execute("""
+        cursor.execute(
+            """
         CREATE TABLE IF NOT EXISTS users (
             user_id BIGINT PRIMARY KEY,
             score INT DEFAULT 0,
             last_login DATE,
             message_count INT DEFAULT 0
         )
-        """)
+        """
+        )
         db_conn.commit()
         logger.info("Users table checked/created successfully.")
     except Exception as e:
@@ -27,18 +31,21 @@ def create_table_if_not_exists() -> None:
         cursor.close()
         db_conn.close()
 
+
 def create_user(user_id: int) -> None:
     """
     Inserts a new user into the 'users' table with default values.
-    
+
     Args:
         user_id (int): The Telegram user ID of the new user.
     """
     db_conn = get_db_connection()
     cursor = db_conn.cursor()
     try:
-        cursor.execute("INSERT INTO users (user_id, score, last_login, message_count) VALUES (%s, %s, %s, %s)", 
-                       (user_id, 0, None, 0))
+        cursor.execute(
+            "INSERT INTO users (user_id, score, last_login, message_count) VALUES (%s, %s, %s, %s)",
+            (user_id, 0, None, 0),
+        )
         db_conn.commit()
         logger.info(f"New user created with ID: {user_id}")
     except Exception as e:
@@ -47,13 +54,14 @@ def create_user(user_id: int) -> None:
         cursor.close()
         db_conn.close()
 
+
 def get_user(user_id: int) -> Optional[Dict[str, Any]]:
     """
     Retrieves user data from the database based on their Telegram user ID.
-    
+
     Args:
         user_id (int): The Telegram user ID.
-    
+
     Returns:
         Optional[Dict[str, Any]]: A dictionary containing user data, or None if the user doesn't exist.
     """
@@ -71,10 +79,11 @@ def get_user(user_id: int) -> Optional[Dict[str, Any]]:
         cursor.close()
         db_conn.close()
 
+
 def update_score(user_id: int, points: int) -> None:
     """
     Updates the score of a user in the database.
-    
+
     Args:
         user_id (int): The Telegram user ID.
         points (int): The points to add or subtract from the user's score.
@@ -82,7 +91,9 @@ def update_score(user_id: int, points: int) -> None:
     db_conn = get_db_connection()
     cursor = db_conn.cursor()
     try:
-        cursor.execute("UPDATE users SET score = score + %s WHERE user_id = %s", (points, user_id))
+        cursor.execute(
+            "UPDATE users SET score = score + %s WHERE user_id = %s", (points, user_id)
+        )
         db_conn.commit()
         logger.info(f"Updated score for user {user_id}: {points} points")
     except Exception as e:
@@ -91,10 +102,11 @@ def update_score(user_id: int, points: int) -> None:
         cursor.close()
         db_conn.close()
 
+
 def update_last_login(user_id: int, last_login_date: datetime) -> None:
     """
     Updates the last login date of the user.
-    
+
     Args:
         user_id (int): The Telegram user ID.
         last_login_date (datetime): The new login date to be updated.
@@ -102,7 +114,10 @@ def update_last_login(user_id: int, last_login_date: datetime) -> None:
     db_conn = get_db_connection()
     cursor = db_conn.cursor()
     try:
-        cursor.execute("UPDATE users SET last_login = %s WHERE user_id = %s", (last_login_date, user_id))
+        cursor.execute(
+            "UPDATE users SET last_login = %s WHERE user_id = %s",
+            (last_login_date, user_id),
+        )
         db_conn.commit()
         logger.info(f"Updated last login for user {user_id}")
     except Exception as e:
@@ -111,13 +126,14 @@ def update_last_login(user_id: int, last_login_date: datetime) -> None:
         cursor.close()
         db_conn.close()
 
+
 def get_top_users(limit: int = 5) -> Optional[list]:
     """
     Retrieves the top users based on their score.
-    
+
     Args:
         limit (int): The maximum number of top users to retrieve.
-    
+
     Returns:
         Optional[list]: A list of top users, or None if there's an error.
     """

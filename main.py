@@ -1,16 +1,15 @@
-from config.logger import setup_logger
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
-from handlers.commands_handler import start, login, score
-from handlers.message_handler import handle_message
-from handlers.leaderboard_handler import leaderboard
-from config.db import BOT_TOKEN
-# from dotenv import load_dotenv
+from telegram.ext import (ApplicationBuilder, CommandHandler, MessageHandler,
+                          filters)
 
-# Load environment variables from .env file
-if __name__ == '__main__':
-    # load_dotenv()
+from config.db import BOT_TOKEN
+from config.logger import setup_logger
+from handlers.commands_handler import login, score, start
+from handlers.leaderboard_handler import leaderboard
+from handlers.message_handler import handle_message
+
+if __name__ == "__main__":
     setup_logger()
-    
+
     app = ApplicationBuilder().token(BOT_TOKEN).build()
 
     # Register handlers
