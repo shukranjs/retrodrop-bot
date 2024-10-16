@@ -6,11 +6,11 @@ from config.logger import logger
 from .connection import get_db_connection
 
 
-def create_table_if_not_exists() -> None:
+async def create_table_if_not_exists() -> None:
     """
     Creates the 'users' table if it doesn't already exist in the database.
     """
-    db_conn = get_db_connection()
+    db_conn = await get_db_connection()
     cursor = db_conn.cursor()
     try:
         cursor.execute(
@@ -32,14 +32,14 @@ def create_table_if_not_exists() -> None:
         db_conn.close()
 
 
-def create_user(user_id: int) -> None:
+async def create_user(user_id: int) -> None:
     """
     Inserts a new user into the 'users' table with default values.
 
     Args:
         user_id (int): The Telegram user ID of the new user.
     """
-    db_conn = get_db_connection()
+    db_conn = await get_db_connection()
     cursor = db_conn.cursor()
     try:
         cursor.execute(
@@ -55,7 +55,7 @@ def create_user(user_id: int) -> None:
         db_conn.close()
 
 
-def get_user(user_id: int) -> Optional[Dict[str, Any]]:
+async def get_user(user_id: int) -> Optional[Dict[str, Any]]:
     """
     Retrieves user data from the database based on their Telegram user ID.
 
@@ -65,12 +65,12 @@ def get_user(user_id: int) -> Optional[Dict[str, Any]]:
     Returns:
         Optional[Dict[str, Any]]: A dictionary containing user data, or None if the user doesn't exist.
     """
-    db_conn = get_db_connection()
+    db_conn = await get_db_connection()
     cursor = db_conn.cursor(dictionary=True)
     try:
         cursor.execute("SELECT * FROM users WHERE user_id = %s", (user_id,))
         user_data = cursor.fetchone()
-        logger.info(f"Fetched user data for ID: {user_id}")
+        logger.info(f"Fetched user data : {user_data}")
         return user_data
     except Exception as e:
         logger.error(f"Error fetching user: {e}")
@@ -80,7 +80,7 @@ def get_user(user_id: int) -> Optional[Dict[str, Any]]:
         db_conn.close()
 
 
-def update_score(user_id: int, points: int) -> None:
+async def update_score(user_id: int, points: int) -> None:
     """
     Updates the score of a user in the database.
 
@@ -88,7 +88,7 @@ def update_score(user_id: int, points: int) -> None:
         user_id (int): The Telegram user ID.
         points (int): The points to add or subtract from the user's score.
     """
-    db_conn = get_db_connection()
+    db_conn = await get_db_connection()
     cursor = db_conn.cursor()
     try:
         cursor.execute(
@@ -103,7 +103,7 @@ def update_score(user_id: int, points: int) -> None:
         db_conn.close()
 
 
-def update_last_login(user_id: int, last_login_date: datetime) -> None:
+async def update_last_login(user_id: int, last_login_date: datetime) -> None:
     """
     Updates the last login date of the user.
 
@@ -111,7 +111,7 @@ def update_last_login(user_id: int, last_login_date: datetime) -> None:
         user_id (int): The Telegram user ID.
         last_login_date (datetime): The new login date to be updated.
     """
-    db_conn = get_db_connection()
+    db_conn = await get_db_connection()
     cursor = db_conn.cursor()
     try:
         cursor.execute(
@@ -127,7 +127,7 @@ def update_last_login(user_id: int, last_login_date: datetime) -> None:
         db_conn.close()
 
 
-def get_top_users(limit: int = 5) -> Optional[list]:
+async def get_top_users(limit: int = 5) -> Optional[list]:
     """
     Retrieves the top users based on their score.
 
@@ -137,7 +137,7 @@ def get_top_users(limit: int = 5) -> Optional[list]:
     Returns:
         Optional[list]: A list of top users, or None if there's an error.
     """
-    db_conn = get_db_connection()
+    db_conn = await get_db_connection()
     cursor = db_conn.cursor(dictionary=True)
     try:
         cursor.execute("SELECT * FROM users ORDER BY score DESC LIMIT %s", (limit,))
