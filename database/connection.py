@@ -4,7 +4,7 @@ from mysql.connector import MySQLConnection
 from config.db import DB_CONFIG
 
 
-async def get_db_connection() -> MySQLConnection:
+def get_db_connection() -> MySQLConnection:
     """
     Establish and return a connection to the MySQL database.
 

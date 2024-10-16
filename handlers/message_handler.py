@@ -19,17 +19,17 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         context (ContextTypes.DEFAULT_TYPE): The callback context from telegram.ext.
     """
     # Get the message
-    user_id = await get_user_id_from_channel(update, context, CHAT_ID)
+    user_id =  await get_user_id_from_channel(update, context, CHAT_ID)
 
     # Get the message text
     post_text = (
         update.effective_message.text.lower() if update.effective_message.text else ""
     )
 
-    user = await get_user(user_id)
+    user = get_user(user_id)
     if user:
         if post_text in ("gm", "gn", "spam"):
-            await update_score(user["user_id"], -1)
+            update_score(user["user_id"], -1)
             await context.bot.send_message(
                 chat_id=CHAT_ID,
                 text="Please avoid spammy messages. You've been penalized 1 point.",
@@ -37,7 +37,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
         elif len(post_text) > 10:
             logger.info(f"Message is longer than 10 characters: {post_text}")
-            await update_score(user["user_id"], 1)
+            update_score(user["user_id"], 1)
             await context.bot.send_message(
                 chat_id=CHAT_ID, text="Great message! You've earned 1 point."
             )

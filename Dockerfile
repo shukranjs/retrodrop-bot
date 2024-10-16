@@ -21,4 +21,4 @@ RUN poetry config virtualenvs.create false && poetry install --no-interaction --
 EXPOSE 8080
 
 # Run the bot
-CMD ["poetry", "run", "python", "main.py"]
+CMD ["python", "main.py"]

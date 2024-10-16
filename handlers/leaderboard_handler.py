@@ -27,10 +27,11 @@ async def leaderboard(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         )
         return
 
-    user = await get_user_id_from_channel(update, context, CHAT_ID)
+    user_id = await get_user_id_from_channel(update, context, CHAT_ID)
 
-    top_users = await get_top_users(limit=5)
-
+    top_users = get_top_users(limit=5)
+    print("top_users", top_users)
+    logger.info(f"toppp {top_users}")
     if top_users:
         leaderboard_text = "🏆 *Leaderboard:*\n\n"
         for idx, top_user in enumerate(top_users, start=1):
@@ -41,10 +42,10 @@ async def leaderboard(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         await context.bot.send_message(
             chat_id=CHAT_ID, text=leaderboard_text, parse_mode="Markdown"
         )
-        logger.info(f"Displayed leaderboard to user {user.id}.")
+        logger.info(f"Displayed leaderboard to user {user_id}.")
     else:
         await context.bot.send_message(
             chat_id=CHAT_ID,
             text="There was an error fetching the leaderboard.",
         )
-        logger.error(f"Error fetching leaderboard data for user {user.id}.")
+        logger.error(f"Error fetching leaderboard data for user {user_id}.")
